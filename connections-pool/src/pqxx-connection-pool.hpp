@@ -16,6 +16,8 @@ namespace cp {
 		std::string password{};
 		std::string hostaddr{};
 		int16_t port = 5432;
+
+		int connections_count = 8;
 	};
 
 	struct connection_manager {
@@ -42,7 +44,7 @@ namespace cp {
 
 	struct connection_pool {
 		connection_pool(const connection_options& options) {
-			for (int i = 0; i < 8; ++i) {
+			for (int i = 0; i < options.connections_count; ++i) {
 				const auto connect_string = std::format("dbname = {} user = {} password = {} hostaddr = {} port = {}", options.dbname, options.user, options.password, options.hostaddr, options.port);
 
 				auto connection = std::make_unique<pqxx::connection>(connect_string);
